@@ -1,5 +1,6 @@
 const path = require('path')
 const miniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 module.exports = {
     entry: {
         main: "./src/index.tsx"
@@ -19,7 +20,6 @@ module.exports = {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {test: /\.tsx?$/, loader: "awesome-typescript-loader"},
-            {test: /\.css$/, use: [miniCssExtractPlugin.loader, "css-loader"]},
             {
                 test: /\.less$/,
                 use: [
@@ -40,11 +40,17 @@ module.exports = {
         new miniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
+            options:{},
+
             filename: "[name].css",
             chunkFilename: "[id].css"
         })
     ],
-    optimization: {},
+    optimization: {
+        minimizer: [
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
     // When importing a module whose path matches one of the following, just
     // assume a corresponding global variable exists and use that instead.
     // This is important because it allows us to avoid bundling all of our
