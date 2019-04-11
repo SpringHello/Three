@@ -13,6 +13,7 @@
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.3",
     "antd": "^3.16.1",
+    "babel-core": "^6.26.3",
     "chalk": "^2.4.2",
     "mini-css-extract-plugin": "^0.5.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
@@ -21,10 +22,14 @@
     "react-dom": "^16.8.5",
     "rimraf": "^2.6.3",
     "three.js": "^0.77.1",
+    "ts-import-plugin": "^1.5.5",
     "webpack": "^4.29.6"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "babel": "^6.23.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-import": "^1.11.0",
     "css-loader": "^2.1.1",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",

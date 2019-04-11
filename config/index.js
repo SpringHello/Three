@@ -5,6 +5,6 @@ module.exports = {
     build: {
         index: path.join(__dirname, '../dist/index.html'),
         assetsRoot: path.join(__dirname, '../dist'),
-        assetsSubDirectory: 'static'
+        assetsSubDirectory: '/'
     }
 }

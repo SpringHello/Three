@@ -1,14 +1,16 @@
 const path = require('path')
 const miniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 module.exports = {
     entry: {
         main: "./src/index.tsx"
+        //vendor: ['antd']
     },
     mode: 'production',
     output: {
-        filename: "bundle.js",
-        path: path.join(__dirname, "../dist")
+        filename: "[name].js",
+        path: path.join(__dirname, "../dist"),
+        chunkFilename: "[name].js"
     },
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
@@ -19,7 +21,10 @@ module.exports = {
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            {test: /\.tsx?$/, loader: "awesome-typescript-loader"},
+            {
+                test: /\.tsx?$/,
+                loader: "babel-loader!awesome-typescript-loader"
+            },
             {
                 test: /\.less$/,
                 use: [
@@ -27,7 +32,10 @@ module.exports = {
                     {
                         loader: "css-loader" // translates CSS into CommonJS
                     }, {
-                        loader: "less-loader" // compiles Less to CSS
+                        loader: "less-loader",
+                        options: {
+                            javascriptEnabled: true
+                        }// compiles Less to CSS
                     }
                 ]
             },
@@ -40,13 +48,17 @@ module.exports = {
         new miniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            options:{},
-
-            filename: "[name].css",
+            options: {
+            },
+            filename: "app.css",
             chunkFilename: "[id].css"
         })
     ],
     optimization: {
+        splitChunks: {
+            chunks: "all",
+            name: 'vendor'
+        },
         minimizer: [
             new OptimizeCSSAssetsPlugin({})
         ]
