@@ -1,6 +1,7 @@
 const path = require('path')
 const miniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+
 module.exports = {
     entry: {
         main: "./src/index.tsx"
@@ -18,12 +19,17 @@ module.exports = {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
+    resolveLoader: {
+        alias: {
+            "my-loader": path.resolve(__dirname, '../loader/my-loader')
+        }
+    },
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
             {
                 test: /\.tsx?$/,
-                loader: "babel-loader!awesome-typescript-loader"
+                loader: "my-loader!awesome-typescript-loader"
             },
             {
                 test: /\.less$/,
@@ -39,6 +45,15 @@ module.exports = {
                     }
                 ]
             },
+            {
+                test: /\.css$/,
+                use: [
+                    miniCssExtractPlugin.loader,
+                    {
+                        loader: "css-loader" // translates CSS into CommonJS
+                    }
+                ]
+            },
             //{test: /\.css$/, loader: "css-loader"},
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             {enforce: "pre", test: /\.js$/, loader: "source-map-loader"}
@@ -48,20 +63,17 @@ module.exports = {
         new miniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            options: {
-            },
+            options: {},
             filename: "app.css",
             chunkFilename: "[id].css"
         })
     ],
     optimization: {
+        minimize: true,
         splitChunks: {
             chunks: "all",
             name: 'vendor'
-        },
-        minimizer: [
-            new OptimizeCSSAssetsPlugin({})
-        ]
+        }
     },
     // When importing a module whose path matches one of the following, just
     // assume a corresponding global variable exists and use that instead.
